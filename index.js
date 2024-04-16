@@ -3,6 +3,8 @@ const app = express()
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://{0}:{1}@cluster0.i2ylb5e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
+app.set('view engine', 'ejs')
+
 String.prototype.format = function () {
     var formatted = this;
     for (var i = 0; i < arguments.length; i++) {
@@ -41,5 +43,5 @@ app.get('/', (요청, 응답) => {
 
 app.get('/list', async (요청, 응답) => {
     let result = await db.collection('post').find().toArray()
-    console.log(result)
+    응답.render('list.ejs', { 글목록: result })
 })

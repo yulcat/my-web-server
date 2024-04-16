@@ -4,6 +4,8 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://{0}:{1}@cluster0.i2ylb5e.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 app.set('view engine', 'ejs')
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 
 String.prototype.format = function () {
     var formatted = this;
@@ -44,4 +46,11 @@ app.get('/', (요청, 응답) => {
 app.get('/list', async (요청, 응답) => {
     let result = await db.collection('post').find().toArray()
     응답.render('list.ejs', { 글목록: result })
+})
+
+app.post('/append', async (요청, 응답) => {
+    console.log(요청.body)
+    await db.collection('post').insertOne({ title: 요청.body.title, content: 요청.body.content })
+    let result = await db.collection('post').find().toArray()
+    응답.redirect('/list')
 })
